@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Puldori MV 스토리보드</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* 레이아웃: 고정 타임라인 + 구간별 컷 카드 그리드 */
+:root{
+  --bg:#f6f5f1; --card:#ffffff; --ink:#1d1d1b; --muted:#6b6a65; --line:#e3e1da;
+  --c3d:#2f8f5b; --clive:#c2581f; --accent:#7a3cff;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ --bg:#151513; --card:#1f1f1c; --ink:#f1f0ea; --muted:#a3a29b; --line:#33332f;
+         --c3d:#5cc58b; --clive:#f08a4b; --accent:#a98bff; color-scheme:dark; }
+}
+:root[data-theme="dark"]{ --bg:#151513; --card:#1f1f1c; --ink:#f1f0ea; --muted:#a3a29b; --line:#33332f;
+       --c3d:#5cc58b; --clive:#f08a4b; --accent:#a98bff; color-scheme:dark; }
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;line-height:1.55}
+header,main{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header{padding-block:32px 8px}
+h1{margin:0 0 4px;font-size:28px;letter-spacing:-.02em}
+.sub{color:var(--muted);font-size:14px}
+.rules{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 0}
+.rule{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:13px}
+.legend{display:flex;flex-wrap:wrap;gap:14px;margin:14px 0 0;font-size:13px;color:var(--muted)}
+.dot{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+main{padding-block:8px 64px}
+.timeline{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding:12px 0 10px;border-bottom:1px solid var(--line)}
+.bar{display:flex;height:34px;border-radius:8px;overflow:hidden;border:1px solid var(--line)}
+.seg{display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:700;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.5);
+  white-space:nowrap;overflow:hidden;text-decoration:none;border-right:1px solid rgba(255,255,255,.35)}
+.seg:hover{filter:brightness(1.12)}
+.ticks{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:4px}
+section{margin-top:36px}
+section h2{font-size:20px;margin:0 0 4px;display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.tag{font-size:11.5px;font-weight:600;border-radius:6px;padding:2px 8px;color:#fff}
+.t3d{background:var(--c3d)} .tlive{background:var(--clive)}
+.lead{color:var(--muted);font-size:14px;margin:0 0 10px}
+.pal{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:0 0 14px;font-size:13px}
+.sw{width:22px;height:22px;border-radius:6px;border:1px solid rgba(0,0,0,.15);flex:none}
+.pal span.fx{margin-left:6px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
+.frame{aspect-ratio:16/9;background:#f4f2ea;position:relative;border-bottom:1px solid var(--line)}
+.frame svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.frame .no{position:absolute;top:6px;left:8px;font-weight:700;font-size:12px;color:#1d1d1b;background:rgba(255,255,255,.85);border-radius:5px;padding:1px 6px}
+.frame .time{position:absolute;top:6px;right:8px;font-size:11.5px;color:#1d1d1b;background:rgba(255,255,255,.85);border-radius:5px;padding:1px 6px;font-variant-numeric:tabular-nums}
+.camrow{font-size:12px;color:var(--muted);padding:8px 14px 0}
+.body{padding:10px 14px 14px;display:flex;flex-direction:column;gap:8px}
+.lyric{font-style:italic;font-size:13.5px;border-left:3px solid var(--line);padding-left:8px}
+.what{font-size:14px}
+.color{font-size:12.5px;display:flex;gap:6px;align-items:flex-start}
+.color i{width:12px;height:12px;border-radius:3px;margin-top:3px;flex:none;border:1px solid rgba(0,0,0,.15)}
+.note{font-size:12.5px;color:var(--accent);font-weight:600}
+.tip{margin-top:12px;background:var(--card);border:1px dashed var(--line);border-radius:10px;padding:10px 14px;font-size:13.5px}
+.tip b{color:var(--accent)}
+ul.q{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 18px 14px 36px;margin:0}
+ul.q li{margin:6px 0;font-size:14px}
+footer{color:var(--muted);font-size:12px;text-align:center;padding:24px}
+@media print{.timeline{position:static} .card{break-inside:avoid}}
+</style>
+</head>
+<body>
+<header>
+  <h1>My name is Puldori — 뮤직비디오 스토리보드</h1>
+  <div class="sub">2026-11-03 · 최종 믹스다운 2:24 기준 · 컷 29개 · 시간은 ±0.5초 오차</div>
+  <div class="rules">
+    <span class="rule">질문 컷: 어둡고 크고 위협적으로, 풀돌이는 한없이 작게</span>
+    <span class="rule">대답 컷: "Dori Dori Puldori"마다 팝 컬러 + 집중선으로 터지는 타이트샷</span>
+    <span class="rule">걸음 컷: 풀돌이는 제자리, 원색 배경만 바뀜</span>
+    <span class="rule">브리지만 무채색: 그래야 파이널 드롭의 색이 터짐</span>
+  </div>
+  <div class="legend">
+    <span><i class="dot" style="background:var(--c3d)"></i>3D 애니메이션</span>
+    <span><i class="dot" style="background:var(--clive)"></i>실사 합성 (사람 몸 + 풀돌이 머리)</span>
+    <span><i class="dot" style="background:var(--accent)"></i>와이피 제안</span>
+    <span>타임라인 막대 색 = 각 구간의 대표 컬러</span>
+  </div>
+</header>
+
+<main>
+  <div class="timeline">
+    <div class="bar" id="bar"></div>
+    <div class="ticks"><span>0:00</span><span>0:30</span><span>1:00</span><span>1:30</span><span>2:00</span><span>2:24</span></div>
+  </div>
+  <div id="sections"></div>
+
+  <section id="open">
+    <h2>열린 질문</h2>
+    <ul class="q">
+      <li>첫 떼창을 머그샷 제안으로 갈지</li>
+      <li>"Your name is Puldori!"는 누구에게 하는 말인지. 제안: 착지한 풀돌이가 카메라(시청자)를 가리키면 "너도 풀돌이야"가 돼서 챌린지 참여로 이어짐</li>
+      <li>1절 보스 외계인과 2절 TV 속 외계인을 같은 캐릭터로 할지 (같으면 복선이 되는 웃음 포인트)</li>
+      <li>교회 씬은 특정 종교 상징(십자가 등)을 크게 보이지 않게, 전쟁 씬은 실제 전쟁 영상 피하기</li>
+      <li>제작 도구 결정. 유료 생성이 필요하면 원화 금액을 먼저 확인하고 진행</li>
+    </ul>
+  </section>
+</main>
+<footer>Puldori · 와이피 정리</footer>
+
+<script>
+// 구간: pal = 컬러 스크립트, fx = 색·효과 규칙
+const S = [
+ {id:"intro", name:"인트로", t:"0:00~0:13", a:0, b:13, kind:"3d", band:"#ff5fa2",
+  pal:["#ff7eb6","#ffffff","#34e7ff","#7b2ff7","#b6ff3b"],
+  fx:"핫핑크 양수 → 눈이 아플 만큼 하얀 실험실 → 독성 보라·형광 연두 포자. 전환은 핑크·시안 RGB 분리 글리치",
+  lead:"평온한 핫핑크 양수에서 출발해, 눈부시게 하얀 실험실과 형광빛 포자로 분위기를 뒤집어요.",
+  tip:"오프닝 훅 가사가 5.5초부터 나오니, 실험실 조명이 \"Do-ri-Do-ri\" 음절마다 깜빡이고 포자는 \"Pul-do-ri\"에 맞춰 형광 연두로 맥박 치면 음악과 화면이 붙어요.",
+  cuts:[
+   [1,"0:00~0:04","(전주)","핫핑크 양수 속에서 평온하게 떠 있는 풀돌이","느린 클로즈업. 4초에 가까워질수록 지직거리는 글리치 → 트랜지션","#ff7eb6","핫핑크 + 하얀 거품, 끝에 핑크·시안 RGB 글리치"],
+   [2,"0:04~0:08","\"Dori Dori Puldori!\" (5.5초부터)","불편할 정도로 깔끔한 흰 실험실","양수가 배양 탱크였음을 보여주는 줌아웃","#34e7ff","순백 + 차가운 시안 조명, 탱크 안만 핫핑크"],
+   [3,"0:08~0:13","\"My name is Puldori!\"","기괴한 포자","포자 클로즈업, 박자에 맞춰 맥박처럼 꿈틀","#b6ff3b","딥 바이올렛 배경 + 형광 연두 맥박 링"]]},
+ {id:"v1", name:"1절", t:"0:14~0:33", a:13, b:33, kind:"3d", band:"#ffd400",
+  pal:["#0d0d12","#39ff6a","#e0002a","#1e5bff","#ffd400","#00d1ff","#ff3d7f"],
+  fx:"질문은 어둡게(보스=형광 초록, 닥터=핏빛 빨강, 경찰=빨강·파랑 점멸). 대답 도리도리는 매번 다른 팝 컬러(노랑 → 시안 → 마젠타) + 집중선으로 터짐",
+  lead:"질문 세 개가 같은 패턴으로 반복돼요. 질문은 어둡고 위협적이고, 대답은 매번 팝 컬러로 터지는 풀돌이 타이트샷이에요.",
+  tip:"세 번의 도리도리를 똑같은 구도로 찍고 배경색과 표정만 바꾸면(점점 더 뻔뻔하게), 반복 자체가 개그가 되고 숏폼에서도 색으로 구분돼요.",
+  cuts:[
+   [4,"0:14~0:18","\"So how far did you get? Show me!\"","보스(외계인)가 화면을 가득 채우며 다그친다","로우앵글, 풀돌이는 발밑에 한없이 작게","#39ff6a","칠흑 배경 + 형광 초록 림라이트, 빨간 만화 글자 \"SHOW ME!\""],
+   [5,"0:18~0:20","\"I said Dori Dori Puldori\"","풀돌이가 고개를 좌우로 흔듦","타이트샷","#ffd400","형광 노랑·주황 방사선 + 하프톤 점",1],
+   [6,"0:20~0:24","\"When you gettin' married? Tell me!\"","엄마 = 닥터(초록 트윈 포니테일, 붉은 눈, 흰 가운). 실루엣에 붉은 눈만 빛남, 한 손엔 동그란 안경","닥터 키비주얼 포즈: 극단적 로우앵글, 발을 들어 작은 풀돌이를 내려다봄","#e0002a","핏빛 크림슨 + 붉은 눈 글로우"],
+   [7,"0:24~0:27","\"I said Dori Dori Puldori\"","풀돌이가 고개를 좌우로 흔듦","타이트샷","#00d1ff","시안·코발트 방사선 + 하프톤 점",1],
+   [8,"0:27~0:30","\"License, registration, ID?\"","유니폼을 입은 강렬한 인물의 실루엣","위협적으로 요구, 화면 반반 빨강·파랑 경광등 점멸","#1e5bff","빨강/파랑 반반 + 하얀 플래시"],
+   [9,"0:30~0:33","\"I said Dori Dori Puldori\"","풀돌이가 고개를 좌우로 흔듦","타이트샷","#ff3d7f","마젠타·핑크 방사선 + 하프톤 점",1]]},
+ {id:"ch1", name:"첫 떼창", t:"0:33~0:51", a:33, b:51, kind:"3d", proposal:true, band:"#ff3d7f",
+  pal:["#ff3d7f","#ffd400","#00d1ff","#8f5bff","#39ff6a","#ff7a1a","#ffffff"],
+  fx:"단어 8개 = 배경색 8개. 단어마다 화면 전체 색이 바뀌는 플래시 컷. 머그샷 판 선은 흰색",
+  lead:"와이피 제안: 경찰이 신분증을 요구한 바로 다음이니, 경찰서 머그샷 촬영으로 이어 가요. 형용사 8개가 사진 8장이자 색 8개가 돼서 가사가 그대로 화면이 돼요.",
+  tip:"숏폼 후보 ②(떼창). 단어 8개에 표정 8개, 색 8개를 맞추는 \"표정 챌린지\"로 쓸 수 있어요.",
+  cuts:[
+   [10,"0:33~0:38","\"I'm peachy, freaky, geeky, squeaky!\"","키 측정판 앞의 풀돌이. 단어마다 표정·포즈가 바뀜 (발그레한 볼, 크게 뜬 눈, 두꺼운 안경, 찍 소리)","정면 고정, 단어마다 플래시 한 번 + 커트","#ff3d7f","peachy 핑크 → freaky 보라 → geeky 시안 → squeaky 노랑"],
+   [11,"0:38~0:43","\"Leafy, cheeky, loopy, kooky!\"","머리에서 잎사귀 돋아나기, 윙크, 빙글빙글 눈, 이상한 포즈","같은 구도, 플래시 커트","#39ff6a","leafy 연두 → cheeky 주황 → loopy 바이올렛 → kooky 빨강"],
+   [12,"0:43~0:51","\"Dori Dori Puldori! ×2\"","고개를 마구 흔들어 머그샷이 전부 흔들린 사진으로 찍힘","연사 플래시, 끝에 흔들린 사진 8장이 게시판에 붙음","#ffd400","노랑 게시판 + 8색 사진 테두리"]]},
+ {id:"dance", name:"댄스", t:"0:51~1:05", a:51, b:65, kind:"3d", band:"#ff7a1a",
+  pal:["#ff7a1a","#00c2a8","#2d5bff","#ff3d7f","#39ff6a"],
+  fx:"마디(약 1.8초)마다 배경이 원색으로 통째로 교체. 속도선, 풀돌이 발자국마다 형광 풀이 돋아남",
+  lead:"바이올린과 해금이 터지는 구간. 풀돌이가 \"나는 내 길 간다, 내 맘대로 해\"를 걸음으로 보여줘요.",
+  tip:"앞에서 질문한 곳(보스 사무실, 엄마 집, 경찰서)을 원색 버전으로 차례로 무시하고 지나가면 1절이 닫혀요. 숏폼 후보 ③(댄스 챌린지).",
+  cuts:[
+   [13,"0:51~1:05","(바이올린·해금 드롭)","강렬한 파워 워킹. 풀돌이는 제자리에서 걷고 배경만 계속 바뀜","광각, 얼굴이 크게 보이고 발끝까지 화면 안에 모두 들어옴","#ff7a1a","주황 → 청록 → 코발트 → 마젠타로 마디마다 교체 + 속도선"]]},
+ {id:"v2", name:"2절", t:"1:05~1:28", a:65, b:88, kind:"live", band:"#00b7ff",
+  pal:["#ffe600","#ff7ab6","#7ef0d0","#ff2e2e","#2b1d14"],
+  fx:"실사지만 그레이딩은 팝. 오피스 = 형광 노랑 모션그래픽, 가정집 = 키치한 핑크·민트, 교회 = 무지개 스테인드글라스 vs 거대한 검은 그림자",
+  lead:"화면이 실사로 바뀌고, 사람 몸에 머리만 풀돌이인 인물이 나와요. 질문이 뉴스 → 외계인 → 신으로 커질수록 \"왜 나한테 물어?\" 반응도 커져요.",
+  tip:"외계인·신 부분은 숏폼 후보 ④(코미디).",
+  cuts:[
+   [14,"1:05~1:10","\"War or peace? Which one's it gonna be?\"","실사 오피스, 직장인 몸에 풀돌이 머리. 뒤쪽 TV 질문 자막이 모션 그래픽으로 커지며 양쪽 볼을 때림","미디엄샷, 글자가 부딪힐 때 화면 흔들림","#ffe600","무채색 오피스 + 형광 노랑·빨강 모션그래픽 글자"],
+   [15,"1:10~1:12","\"Me? I don't know!\" / \"I said Dori Dori Puldori\"","도리도리 하며 \"나한테 왜 그딴 걸 물어\" 하는 액션","얼굴 클로즈업","#ffe600","노랑 방사선 팝 배경으로 전환",1],
+   [16,"1:12~1:16","\"Are humans tasty? Are they yummy?\"","실사 가정집 TV에서 외계인이 질문","TV로 줌인, TV 속 \"외계인 발견\" 보도 영상","#ff7ab6","키치 핑크 벽지 + 민트 소파, 빨간 속보 띠"],
+   [17,"1:16~1:19","\"I said Dori Dori Puldori\"","가정부 차림에 머리만 풀돌이인 인물이 도리도리","줌아웃 후 바스트샷","#7ef0d0","핑크·민트 줄무늬 배경",1],
+   [18,"1:19~1:24","\"Did you find the truth? Did you find the key?\"","교회, 머리만 풀돌이인 신도. 뒤로 커다란 그림자가 드리우며 신이 물음","로우앵글, 그림자가 화면을 덮음","#2b1d14","무지개 스테인드글라스 빛 vs 거대한 검은 그림자"],
+   [19,"1:24~1:28","\"Seriously?\" / \"I said Dori Dori Puldori\"","고개를 흔들며 \"난 그런 거 몰라! 묻지 마!\"","\"Seriously?\"에서 정적 한 박 후 클로즈업","#ff2e2e","무지개 방사선 + 빨간 만화 글자",1]]},
+ {id:"bridge", name:"브리지", t:"1:28~1:44", a:88, b:104, kind:"3d", band:"#8d8d8d",
+  pal:["#5a5a5a","#9a9a9a","#d0d0d0","#39ff6a"],
+  fx:"MV에서 유일한 무채색 구간. 배경은 회색조, 풀돌이 몸과 빨간 눈만 색이 남음. 마지막 컷에서 하얗게 멈췄다가 드롭에서 색 폭발",
+  lead:"다시 3D. 풀돌이 얼굴은 화면 가운데 고정, 주위만 풀돌이의 지난 삶으로 바뀌는 몽타주예요.",
+  tip:"소리가 빠지고 담담한 구간이라, 색도 빼고 표정도 무표정에 가까울수록 다음 드롭이 더 터져요.",
+  cuts:[
+   [20,"1:28~1:32","\"I was just born like this\"","징그러운 포자를 터뜨리고 나오는 풀돌이","얼굴 가운데 고정","#5a5a5a","회색조, 풀돌이만 컬러"],
+   [21,"1:32~1:34","\"Just do\"","실험당하는 풀돌이","얼굴 가운데 고정","#9a9a9a","회색조, 풀돌이만 컬러"],
+   [22,"1:34~1:36","\"Just run\"","지구에서 구박받는 풀돌이","얼굴 가운데 고정","#9a9a9a","회색조, 풀돌이만 컬러"],
+   [23,"1:36~1:41","\"Don't ask me — 'cause I don't know either\"","집에서 무시당하는 풀돌이","얼굴 가운데 고정","#9a9a9a","회색조, 풀돌이만 컬러"],
+   [24,"1:41~1:44","\"Just Dori Dori Puldori\"","배경이 빠르게 바뀌다 하얗게 멈춤, 풀돌이가 도리도리","얼굴 가운데 고정","#ffffff","순백 정지 → 가장자리부터 색이 새어 들어옴",1]]},
+ {id:"final", name:"파이널·아웃트로", t:"1:44~2:24", a:104, b:144, kind:"3d", band:"linear-gradient(90deg,#ff3d7f,#ffd400,#39ff6a,#00d1ff,#8f5bff)",
+  pal:["#ff3d7f","#ffd400","#39ff6a","#00d1ff","#8f5bff","#ff7a1a"],
+  fx:"MV 전체에서 가장 화려하게: 무지개 방사선, 컨페티, 풀돌이 포스터의 X 패턴, 각기 다른 색의 풀돌이들. 아웃트로는 노을빛 서울(주황·보라)",
+  lead:"세상사를 다 무시하고 걷던 풀돌이가 결국 2026년 지구에 떨어지며 끝나요. MV의 끝이 세계관의 시작(서울 2026)과 이어져요.",
+  cuts:[
+   [25,"1:44~1:56","\"I SAID DORI DORI PULDORI!\" / \"I'm peachy… Leafy…\"","세상사를 다 무시하고 파워 워킹하는 풀돌이","댄스 구간과 같은 광각 구도로 수미상관","#ff3d7f","무지개 방사선 + 컨페티 + 속도선"],
+   [26,"1:56~2:00","\"Dori Dori Puldori!\" (1번째)","포자가 박자마다 하나씩 터지며 여러 종류의 풀돌이가 태어남 (화분, 꽃, 잎사귀, 후광, 도끼…)","박자마다 1 → 2 → 3 → 4 → 5 순서로 한 개씩 팝","#8f5bff","딥 바이올렛 + 풀돌이마다 다른 색 글로우"],
+   ["26B","2:00~2:05","\"Dori Dori Puldori!\" (2번째)","화면 가득한 포자가 한꺼번에 터지며 풀돌이 최소 30마리 이상이 동시에 탄생, 다 같이 도리도리","카메라가 확 빠지는 줌아웃, 동시 폭발 순간에 화면 플래시","#ffd400","무지개 컨페티 폭발, 풀돌이 30+ 각기 다른 색·머리 오브젝트"],
+   [27,"2:05~2:15","\"My name is Puldori!\"","워킹하던 풀돌이가 발을 헛디디며 아래로 추락","위에서 내려다보는 부감, 구름을 뚫고 지구가 보임","#00d1ff","새파란 하늘 + 풀돌이 뒤로 무지개 꼬리"],
+   [28,"2:15~2:24","\"Your name is Puldori!\"","2026년 서울에 떨어진 풀돌이. 끝","마지막 음에 맞춰 하드컷, \"Seoul, 2026\" 자막","#ff7a1a","노을 주황·보라 하늘의 서울 실루엣"]]}
+];
+
+/* ---------- 스케치 도구 (320x180 프레임) ---------- */
+const K = "#2b2b28", G = "#8fd19e", PINK = "#f29bb0";
+let uid = 0;
+const svg = body => `<svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg" font-family="Malgun Gothic, sans-serif">${body}</svg>`;
+const bg = c => `<rect width="320" height="180" fill="${c}"/>`;
+// 만화 글자: 두꺼운 외곽선
+const txt = (x, y, t, o = {}) => `<text x="${x}" y="${y}" font-size="${o.size || 11}" font-weight="${o.w || 800}" fill="${o.fill || K}" text-anchor="${o.anchor || "middle"}" ${o.stroke ? `stroke="${o.stroke}" stroke-width="${o.sw || 3}" paint-order="stroke" stroke-linejoin="round"` : ""} ${o.rot ? `transform="rotate(${o.rot} ${x} ${y})"` : ""}>${t}</text>`;
+const arrow = (x1, y1, x2, y2, c = K) => {
+  const a = Math.atan2(y2 - y1, x2 - x1), h = 6;
+  return `<path d="M${x1} ${y1}L${x2} ${y2}" stroke="${c}" stroke-width="1.8" fill="none"/>
+  <path d="M${x2} ${y2}L${x2 - h * Math.cos(a - .5)} ${y2 - h * Math.sin(a - .5)}M${x2} ${y2}L${x2 - h * Math.cos(a + .5)} ${y2 - h * Math.sin(a + .5)}" stroke="${c}" stroke-width="1.8"/>`;
+};
+const flash = (x, y, r) => `<path d="${Array.from({length: 16}, (_, i) => { const a = i * Math.PI / 8, rr = i % 2 ? r * .45 : r; return `${i ? "L" : "M"}${x + rr * Math.cos(a)} ${y + rr * Math.sin(a)}`; }).join("")}Z" fill="#fff" stroke="#ffd400" stroke-width="1.4"/>`;
+// 방사선: 두 색이 번갈아 퍼지는 집중 배경 (cs가 3색 이상이면 무지개)
+const rays = (cs, cx = 160, cy = 90, n = 20) => bg(cs[0]) + Array.from({length: n}, (_, i) => {
+  if (cs.length === 2 && i % 2) return "";
+  const a = i * 2 * Math.PI / n, w = Math.PI / n, R = 420, c = cs.length === 2 ? cs[1] : cs[i % cs.length];
+  return `<path d="M${cx} ${cy}L${cx + R * Math.cos(a - w)} ${cy + R * Math.sin(a - w)}L${cx + R * Math.cos(a + w)} ${cy + R * Math.sin(a + w)}Z" fill="${c}"/>`;
+}).join("");
+const dots = (c, op = .35, sz = 8) => { const id = "hd" + (++uid); return `<defs><pattern id="${id}" width="${sz}" height="${sz}" patternUnits="userSpaceOnUse"><circle cx="${sz / 2}" cy="${sz / 2}" r="${sz * .2}" fill="${c}"/></pattern></defs><rect width="320" height="180" fill="url(#${id})" opacity="${op}"/>`; };
+const speed = (c, op = .7) => Array.from({length: 14}, (_, i) => { const y = 8 + i * 12.5, x = (i * 53) % 120; return `<path d="M${x} ${y}h${50 + (i * 37) % 70}M${200 + (i * 29) % 90} ${y + 5}h${40 + (i * 17) % 50}" stroke="${c}" stroke-width="${1 + i % 3}" opacity="${op}" stroke-linecap="round"/>`; }).join("");
+const CONF = ["#ff3d7f", "#ffd400", "#39ff6a", "#00d1ff", "#8f5bff", "#ff7a1a", "#fff"];
+const confetti = (n = 36) => Array.from({length: n}, (_, i) => { const x = (Math.sin(i * 12.9898) * 43758.5453 % 1 + 1) % 1 * 320, y = (Math.sin(i * 78.233) * 12543.31 % 1 + 1) % 1 * 180; return `<rect x="${x}" y="${y}" width="6" height="3" fill="${CONF[i % CONF.length]}" transform="rotate(${(i * 47) % 180} ${x} ${y})"/>`; }).join("");
+// 풀돌이 포스터의 큰 X 패턴
+const xmark = (c, op = .22) => `<path d="M40 -10L280 190M280 -10L40 190" stroke="${c}" stroke-width="46" opacity="${op}"/>`;
+
+// 눈: spiral(기본) · wide · glasses · wink · loopy · x · closed
+function eye(x, y, r, kind, s) {
+  if (kind === "closed") return `<path d="M${x - r} ${y}q${r} ${r * .7} ${2 * r} 0" stroke="${K}" stroke-width="${1.3 * s}" fill="none"/>`;
+  if (kind === "wink") return `<path d="M${x - r} ${y}l${2 * r} ${-r * .5}M${x - r} ${y}l${2 * r} ${r * .5}" stroke="${K}" stroke-width="${1.3 * s}" fill="none"/>`;
+  let e = `<circle cx="${x}" cy="${y}" r="${r}" fill="#fff" stroke="${K}" stroke-width="${1.1 * s}"/>`;
+  if (kind === "wide") return e + `<circle cx="${x}" cy="${y}" r="${r * .25}" fill="${K}"/>`;
+  if (kind === "x") return e + `<path d="M${x - r * .5} ${y - r * .5}l${r} ${r}M${x + r * .5} ${y - r * .5}l${-r} ${r}" stroke="#c0392b" stroke-width="${1.4 * s}"/>`;
+  if (kind === "loopy") return e + `<path d="M${x} ${y}m0 0a${r * .2} ${r * .2} 0 1 1 ${r * .4} 0a${r * .4} ${r * .4} 0 1 1 ${-r * .8} 0a${r * .6} ${r * .6} 0 1 1 ${r * 1.2} 0" stroke="#7a3cff" stroke-width="${s}" fill="none"/>`;
+  e += `<circle cx="${x}" cy="${y}" r="${r * .62}" fill="none" stroke="#e0002a" stroke-width="${1.2 * s}"/><circle cx="${x}" cy="${y}" r="${r * .3}" fill="#e0002a"/>`;
+  if (kind === "glasses") e += `<circle cx="${x}" cy="${y}" r="${r * 1.25}" fill="none" stroke="${K}" stroke-width="${2.2 * s}"/>`;
+  return e;
+}
+// 풀돌이: (x,y)=발 아래 중앙. o: color, shake, walk, eyes, hat, hb(사람 몸: suit|maid|robe), blush, mouth
+function P(x, y, s, o = {}) {
+  const c = o.color || G, sw = Math.max(1, 1.2 * s), hr = 22 * s;
+  let g = "", hy;
+  if (o.hb) {
+    const top = y - 78 * s; hy = top - hr * .75;
+    const cloth = {suit: "#3d4656", maid: "#2f2f3a", robe: "#8a8070"}[o.hb];
+    g += `<path d="M${x - 40 * s} ${y}L${x - 36 * s} ${top + 16 * s}Q${x - 34 * s} ${top} ${x - 14 * s} ${top}L${x + 14 * s} ${top}Q${x + 34 * s} ${top} ${x + 36 * s} ${top + 16 * s}L${x + 40 * s} ${y}Z" fill="${cloth}" stroke="${K}" stroke-width="${sw}"/>`;
+    if (o.hb === "suit") g += `<path d="M${x - 8 * s} ${top}L${x} ${top + 26 * s}L${x + 8 * s} ${top}Z" fill="#fff"/><path d="M${x} ${top + 4 * s}l-3 ${8 * s}l3 ${16 * s}l3 ${-16 * s}Z" fill="#e0002a"/>`;
+    if (o.hb === "maid") g += `<rect x="${x - 18 * s}" y="${top + 18 * s}" width="${36 * s}" height="${y - top - 18 * s}" fill="#fff" stroke="${K}" stroke-width="${sw * .7}"/><path d="M${x - 12 * s} ${top}h${24 * s}l-4 ${8 * s}h${-16 * s}Z" fill="#fff"/>`;
+    if (o.hb === "robe") g += `<path d="M${x} ${top}V${y}" stroke="${K}" stroke-width="${sw * .7}"/><rect x="${x - 10 * s}" y="${top + 30 * s}" width="${20 * s}" height="${14 * s}" fill="#5a4f40"/>`;
+  } else {
+    hy = y - 30 * s - hr * .8;
+    const L = o.walk ? `<path d="M${x - 6 * s} ${y - 8 * s}l${-12 * s} ${8 * s}M${x + 6 * s} ${y - 8 * s}l${10 * s} ${8 * s}" stroke="${K}" stroke-width="${7 * s}" stroke-linecap="round"/><path d="M${x - 6 * s} ${y - 8 * s}l${-12 * s} ${8 * s}M${x + 6 * s} ${y - 8 * s}l${10 * s} ${8 * s}" stroke="${c}" stroke-width="${5 * s}" stroke-linecap="round"/>`
+      : `<rect x="${x - 11 * s}" y="${y - 8 * s}" width="${8 * s}" height="${8 * s}" rx="${2 * s}" fill="${c}" stroke="${K}" stroke-width="${sw}"/><rect x="${x + 3 * s}" y="${y - 8 * s}" width="${8 * s}" height="${8 * s}" rx="${2 * s}" fill="${c}" stroke="${K}" stroke-width="${sw}"/>`;
+    const arms = o.walk ? `M${x - 12 * s} ${y - 24 * s}l${10 * s} ${10 * s}M${x + 12 * s} ${y - 24 * s}l${-14 * s} ${-6 * s}` : `M${x - 12 * s} ${y - 24 * s}l${-6 * s} ${12 * s}M${x + 12 * s} ${y - 24 * s}l${6 * s} ${12 * s}`;
+    g += L + `<path d="${arms}" stroke="${K}" stroke-width="${5 * s}" stroke-linecap="round"/><path d="${arms}" stroke="${c}" stroke-width="${3.4 * s}" stroke-linecap="round"/>`;
+    g += `<rect x="${x - 13 * s}" y="${y - 34 * s}" width="${26 * s}" height="${28 * s}" rx="${10 * s}" fill="${c}" stroke="${K}" stroke-width="${sw}"/>`;
+  }
+  if (o.shake) {
+    g += `<ellipse cx="${x - 9 * s}" cy="${hy}" rx="${hr * 1.1}" ry="${hr}" fill="${c}" opacity=".35"/><ellipse cx="${x + 9 * s}" cy="${hy}" rx="${hr * 1.1}" ry="${hr}" fill="${c}" opacity=".35"/>`;
+    for (const d of [-1, 1]) g += `<path d="M${x + d * (hr * 1.3 + 4 * s)} ${hy - 12 * s}q${d * 8 * s} ${12 * s} 0 ${24 * s}M${x + d * (hr * 1.3 + 12 * s)} ${hy - 8 * s}q${d * 6 * s} ${8 * s} 0 ${16 * s}" stroke="${K}" stroke-width="${sw * 1.3}" fill="none"/>`;
+  }
+  g += `<ellipse cx="${x - hr * 1.08}" cy="${hy + 2 * s}" rx="${5 * s}" ry="${8 * s}" fill="${c}" stroke="${K}" stroke-width="${sw}" transform="rotate(-25 ${x - hr * 1.08} ${hy})"/><ellipse cx="${x + hr * 1.08}" cy="${hy + 2 * s}" rx="${5 * s}" ry="${8 * s}" fill="${c}" stroke="${K}" stroke-width="${sw}" transform="rotate(25 ${x + hr * 1.08} ${hy})"/>`;
+  g += `<ellipse cx="${x}" cy="${hy}" rx="${hr * 1.1}" ry="${hr}" fill="${c}" stroke="${K}" stroke-width="${sw}"/><ellipse cx="${x}" cy="${hy + hr * .45}" rx="${hr * .8}" ry="${hr * .4}" fill="#fff" opacity=".45"/>`;
+  if (o.hat === "leaf") g += `<path d="M${x} ${hy - hr}q${-10 * s} ${-14 * s} ${-16 * s} ${-6 * s}q${8 * s} ${6 * s} ${16 * s} ${6 * s}q${4 * s} ${-16 * s} ${16 * s} ${-12 * s}q${-6 * s} ${10 * s} ${-16 * s} ${12 * s}" fill="#4f9a5c" stroke="${K}" stroke-width="${sw * .8}"/>`;
+  if (o.hat === "pot") g += `<path d="M${x - hr * .9} ${hy - hr * .55}L${x - hr * .7} ${hy - hr * 1.35}H${x + hr * .7}L${x + hr * .9} ${hy - hr * .55}Z" fill="#8a5a3c" stroke="${K}" stroke-width="${sw}"/>`;
+  if (o.hat === "flower") g += `<circle cx="${x}" cy="${hy - hr * 1.1}" r="${7 * s}" fill="#f7f3d9" stroke="${K}" stroke-width="${sw * .8}"/><circle cx="${x}" cy="${hy - hr * 1.1}" r="${3 * s}" fill="#e8b93a"/>`;
+  if (o.hat === "ax") g += `<path d="M${x + 4 * s} ${hy - hr * .7}l${-4 * s} ${-14 * s}h${-14 * s}l${2 * s} ${10 * s}Z" fill="#555" stroke="${K}" stroke-width="${sw * .8}"/><path d="M${x + 2 * s} ${hy - hr * 1.2}l${18 * s} ${-6 * s}" stroke="#8a5a3c" stroke-width="${3 * s}"/>`;
+  if (o.hat === "halo") g += `<ellipse cx="${x}" cy="${hy - hr * 1.25}" rx="${12 * s}" ry="${3.5 * s}" fill="none" stroke="#ffd400" stroke-width="${2 * s}"/>`;
+  const ek = o.eyes || "spiral", er = 7.5 * s;
+  g += eye(x - 9 * s, hy - 2 * s, er, ek === "wink" ? "spiral" : ek, s) + eye(x + 9 * s, hy - 2 * s, er, ek, s);
+  if (o.blush) g += `<ellipse cx="${x - 16 * s}" cy="${hy + 8 * s}" rx="${4 * s}" ry="${2.5 * s}" fill="${PINK}" opacity=".9"/><ellipse cx="${x + 16 * s}" cy="${hy + 8 * s}" rx="${4 * s}" ry="${2.5 * s}" fill="${PINK}" opacity=".9"/>`;
+  if (o.mouth === "o") g += `<ellipse cx="${x}" cy="${hy + 12 * s}" rx="${3.5 * s}" ry="${4.5 * s}" fill="#5a2230" stroke="${K}" stroke-width="${sw * .7}"/>`;
+  else if (o.mouth === "flat") g += `<path d="M${x - 4 * s} ${hy + 11 * s}h${8 * s}" stroke="${K}" stroke-width="${sw}"/>`;
+  else g += `<path d="M${x - 3 * s} ${hy + 9 * s}q${3 * s} ${3 * s} ${6 * s} 0" stroke="${K}" stroke-width="${sw * .8}" fill="none"/><ellipse cx="${x}" cy="${hy + 12.5 * s}" rx="${2.2 * s}" ry="${3 * s}" fill="${PINK}" stroke="${K}" stroke-width="${sw * .5}"/>`;
+  return g;
+}
+// 대답 타이트샷: 팝 방사선 + 하프톤 + 풀돌이 얼굴
+const answer = (cs, o = {}) => rays(cs) + dots("#fff", .25) + P(160, o.hb ? 290 : 250, o.hb ? 2.3 : 3, {shake: true, ...o});
+// 브리지 몽타주: 회색조 배경 위에 컬러 풀돌이
+const bridge = body => `<defs><filter id="gs${++uid}"><feColorMatrix type="saturate" values="0"/></filter></defs><g filter="url(#gs${uid})">${body}</g>` + P(160, 250, 3, {mouth: "flat"});
+const sil = (path, op = 1, c = "#141414") => `<path d="${path}" fill="${c}" opacity="${op}"/>`;
+const spore = (x, y, r, c = "#6b4a7a", dot = "#b6ff3b") => {
+  let g = `<circle cx="${x}" cy="${y}" r="${r}" fill="${c}" stroke="${K}" stroke-width="1.2"/>`;
+  for (let i = 0; i < 9; i++) { const a = i * 0.7; g += `<circle cx="${x + r * .95 * Math.cos(a)}" cy="${y + r * .95 * Math.sin(a)}" r="${r * .22}" fill="${c}" stroke="${K}" stroke-width="1"/>`; }
+  for (let i = 0; i < 5; i++) { const a = i * 1.3 + .4; g += `<circle cx="${x + r * .45 * Math.cos(a)}" cy="${y + r * .45 * Math.sin(a)}" r="${r * .1}" fill="${dot}" opacity=".9"/>`; }
+  return g;
+};
+const lab = (light = "#bff6ff") => bg("#ffffff") + `<rect width="320" height="22" fill="${light}"/><path d="M0 130H320M60 130L0 180M260 130L320 180M120 130L100 180M200 130L220 180" stroke="#c8eef4" stroke-width="1"/>` +
+  [20, 80, 140, 200, 260].map(x => `<rect x="${x}" y="30" width="44" height="88" fill="none" stroke="#d6f3f7"/>`).join("");
+const tv = (x, y, w, h, inner, scr = "#2e4a6b") => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="4" fill="#1d2430" stroke="${K}" stroke-width="2"/><rect x="${x + 4}" y="${y + 4}" width="${w - 8}" height="${h - 8}" fill="${scr}"/>${inner || ""}`;
+const alienHead = (x, y, s) => `<ellipse cx="${x}" cy="${y}" rx="${30 * s}" ry="${38 * s}" fill="#39ff6a" stroke="${K}" stroke-width="1.4"/><ellipse cx="${x - 12 * s}" cy="${y - 2 * s}" rx="${9 * s}" ry="${13 * s}" fill="#111" transform="rotate(-20 ${x - 12 * s} ${y})"/><ellipse cx="${x + 12 * s}" cy="${y - 2 * s}" rx="${9 * s}" ry="${13 * s}" fill="#111" transform="rotate(20 ${x + 12 * s} ${y})"/><circle cx="${x}" cy="${y - 22 * s}" r="${5 * s}" fill="#111"/><path d="M${x - 8 * s} ${y + 22 * s}q${8 * s} ${6 * s} ${16 * s} 0" stroke="#111" stroke-width="${1.5 * s}" fill="none"/>`;
+const crowd = (xs, y, op = .85) => xs.map(x => sil(`M${x - 14} ${y}Q${x - 14} ${y - 40} ${x} ${y - 42}Q${x + 14} ${y - 40} ${x + 14} ${y}Z M${x} ${y - 44} m-9 0 a9 9 0 1 0 18 0 a9 9 0 1 0 -18 0`, op)).join("");
+const glitch = () => [[190, 36, 110], [220, 66, 90], [170, 108, 130], [240, 140, 70], [0, 86, 60]].map(([x, y, w], i) => `<rect x="${x}" y="${y}" width="${w}" height="${5 + i % 2 * 3}" fill="${i % 2 ? "#34e7ff" : "#ff2e8b"}" opacity=".85"/>`).join("");
+// 머그샷: 단어마다 색이 다른 4칸 + 측정판 선
+const mug = cs => cs.map((c, i) => `<rect x="${i * 80}" y="0" width="80" height="180" fill="${c}"/>`).join("") + dots("#fff", .2) +
+  Array.from({length: 6}, (_, i) => `<path d="M0 ${22 + i * 18}H320" stroke="#fff" stroke-width="1.2" opacity=".75"/>`).join("") + `<rect x="0" y="122" width="320" height="58" fill="#1d1d1b" opacity=".18"/>`;
+const mini = (x, eyes, label, extra = {}) => P(x, 176, .55, {eyes, ...extra}) + txt(x, 134, label, {size: 10, fill: "#fff", stroke: "#1d1d1b", sw: 3});
+
+const D = {
+  1: () => bg("#ff7eb6") + `<circle cx="160" cy="90" r="120" fill="#ff9cc8"/><circle cx="160" cy="90" r="78" fill="#ffc2dd"/>` +
+       [[60, 40, 6], [270, 50, 4], [80, 140, 5], [240, 130, 7], [120, 30, 3], [30, 90, 4]].map(([x, y, r]) => `<circle cx="${x}" cy="${y}" r="${r}" fill="#fff" opacity=".85"/>`).join("") +
+       P(160, 138, 1.25, {eyes: "closed", mouth: "flat"}) + glitch() + txt(272, 172, "지직 →", {size: 11, fill: "#fff", stroke: "#b2005a"}),
+  2: () => lab() + `<rect x="128" y="48" width="64" height="88" rx="14" fill="#ff7eb6" stroke="${K}" stroke-width="1.6"/><rect x="122" y="40" width="76" height="10" rx="3" fill="#cfe9ee" stroke="${K}"/><rect x="122" y="134" width="76" height="12" rx="3" fill="#cfe9ee" stroke="${K}"/>` +
+       P(160, 124, .7, {eyes: "closed", mouth: "flat"}) +
+       `<rect x="118" y="36" width="84" height="114" fill="none" stroke="#7a3cff" stroke-dasharray="4 3" stroke-width="1.4"/><rect x="40" y="14" width="240" height="152" fill="none" stroke="#7a3cff" stroke-dasharray="4 3" stroke-width="1.4"/>` +
+       arrow(118, 36, 46, 18, "#7a3cff") + arrow(202, 150, 274, 162, "#7a3cff") + txt(160, 172, "줌아웃", {size: 10, fill: "#7a3cff"}),
+  3: () => bg("#2a0d4a") + spore(60, 140, 26, "#4d2a7a") + spore(270, 40, 22, "#4d2a7a") + spore(280, 150, 16, "#4d2a7a") +
+       `<circle cx="160" cy="88" r="66" fill="none" stroke="#b6ff3b" stroke-width="2.5" opacity=".9"/><circle cx="160" cy="88" r="78" fill="none" stroke="#b6ff3b" stroke-width="1.5" opacity=".5"/><circle cx="160" cy="88" r="90" fill="none" stroke="#b6ff3b" stroke-width="1" opacity=".25"/>` +
+       spore(160, 88, 52, "#7b2ff7") + `<g opacity=".45">${P(160, 116, .8, {eyes: "closed", color: "#b6ff3b"})}</g>` + txt(160, 172, "두근 · 두근", {size: 11, fill: "#b6ff3b"}),
+  4: () => bg("#07070b") + `<circle cx="160" cy="46" r="110" fill="#39ff6a" opacity=".16"/><path d="M0 180L160 120L320 180Z" fill="#141a14"/>` + alienHead(160, 46, 2.1) +
+       `<path d="M30 180Q60 110 100 96M290 180Q260 110 220 96" stroke="#24c94f" stroke-width="16" fill="none" stroke-linecap="round"/>` +
+       P(160, 176, .45) + txt(266, 142, "SHOW ME!", {size: 17, fill: "#ff2e2e", stroke: "#ffd400", sw: 3, rot: -8}),
+  5: () => answer(["#ffd400", "#ff8a00"]),
+  6: () => bg("#3a0010") + `<circle cx="150" cy="40" r="120" fill="#e0002a" opacity=".35"/>` +
+       sil("M70 180L118 56Q150 40 182 56L250 180Z") + `<path d="M182 60L250 180" stroke="#ffffff" stroke-width="2" opacity=".6"/><path d="M118 60L70 180" stroke="#ffffff" stroke-width="2" opacity=".4"/>` +
+       `<path d="M168 22Q230 20 292 60Q240 44 176 38Z" fill="#0f4d2a"/><path d="M134 22Q90 40 74 96Q100 52 140 36Z" fill="#0f4d2a"/>` +
+       sil("M150 26m-20 0a20 22 0 1 0 40 0a20 22 0 1 0 -40 0") +
+       `<circle cx="142" cy="26" r="7" fill="#ff2e2e" opacity=".35"/><circle cx="158" cy="26" r="7" fill="#ff2e2e" opacity=".35"/><circle cx="142" cy="26" r="2.8" fill="#ff5a5a"/><circle cx="158" cy="26" r="2.8" fill="#ff5a5a"/>` +
+       `<circle cx="84" cy="122" r="7" fill="none" stroke="#fff" stroke-width="1.4"/><circle cx="100" cy="126" r="7" fill="none" stroke="#fff" stroke-width="1.4"/>` +
+       sil("M150 120L130 150Q118 176 140 180L176 180Q188 160 170 128Z") + `<ellipse cx="152" cy="170" rx="26" ry="14" fill="#5a0d18"/>` +
+       P(250, 178, .38) + txt(262, 148, "MARRIED?", {size: 15, fill: "#fff", stroke: "#e0002a", sw: 3, rot: 8}),
+  7: () => answer(["#00d1ff", "#1e5bff"]),
+  8: () => `<rect width="160" height="180" fill="#e0002a"/><rect x="160" width="160" height="180" fill="#1e5bff"/>` + dots("#000", .18) +
+       sil("M100 180L112 84Q160 64 208 84L220 180Z") + sil("M160 70m-24 0a24 26 0 1 0 48 0a24 26 0 1 0 -48 0") +
+       sil("M126 52h68l-6 -14h-56Z") + `<polygon points="160,104 166,116 160,128 154,116" fill="#ffd400"/>` +
+       sil("M208 100L262 72l6 8l-50 34Z") + flash(280, 40, 16) + P(160, 178, .42) + txt(70, 46, "ID?", {size: 24, fill: "#ffd400", stroke: "#141414", sw: 4}),
+  9: () => answer(["#ff3d7f", "#ff9cc8"], {eyes: "wide", mouth: "flat"}),
+  10: () => mug(["#ff3d7f", "#8f5bff", "#00d1ff", "#ffd400"]) + P(160, 116, 1, {blush: true}) +
+       `<rect x="126" y="96" width="68" height="16" fill="#111"/>` + txt(160, 108, "PULDORI 033", {size: 8, fill: "#ffd400"}) + flash(292, 26, 18) +
+       mini(40, "spiral", "peachy", {blush: true}) + mini(120, "wide", "freaky") + mini(200, "glasses", "geeky") + mini(280, "spiral", "squeaky", {mouth: "o"}),
+  11: () => mug(["#39ff6a", "#ff7a1a", "#7b2ff7", "#e0002a"]) + P(160, 116, 1, {hat: "leaf"}) + flash(28, 26, 18) +
+       mini(40, "spiral", "leafy", {hat: "leaf"}) + mini(120, "wink", "cheeky") + mini(200, "loopy", "loopy") + mini(280, "x", "kooky", {mouth: "o"}),
+  12: () => bg("#ffd400") + dots("#ff7a1a", .35) + Array.from({length: 8}, (_, i) => {
+         const x = 30 + (i % 4) * 72, y = 18 + Math.floor(i / 4) * 80, r = (i % 3 - 1) * 5, fr = CONF[i % 6];
+         return `<g transform="rotate(${r} ${x + 30} ${y + 34})"><rect x="${x}" y="${y}" width="60" height="70" fill="${fr}" stroke="${K}"/><rect x="${x + 5}" y="${y + 5}" width="50" height="50" fill="#fff"/>
+           <g opacity=".5">${P(x + 26, y + 58, .55)}</g><g opacity=".5">${P(x + 34, y + 58, .55)}</g><circle cx="${x + 30}" cy="${y + 2}" r="3" fill="#141414"/></g>`; }).join(""),
+  13: () => `<rect width="110" height="180" fill="#ff7a1a"/><rect x="110" width="100" height="180" fill="#00c2a8"/><rect x="210" width="110" height="180" fill="#2d5bff"/>` + dots("#fff", .18) + speed("#fff", .55) +
+       txt(55, 28, "보스 사무실", {size: 10, fill: "#fff", stroke: "#141414"}) + txt(160, 28, "엄마 집", {size: 10, fill: "#fff", stroke: "#141414"}) + txt(265, 28, "경찰서", {size: 10, fill: "#fff", stroke: "#141414"}) +
+       `<rect x="0" y="146" width="320" height="34" fill="#141414" opacity=".35"/>` + [[122, 172], [146, 176], [176, 172], [198, 176]].map(([x, y]) => `<path d="M${x} ${y}l-4 -8M${x} ${y}l0 -10M${x} ${y}l4 -8" stroke="#39ff6a" stroke-width="2.5" stroke-linecap="round"/>`).join("") +
+       arrow(300, 160, 236, 160, "#fff") + arrow(84, 160, 20, 160, "#fff") + P(160, 172, 2.05, {walk: true}),
+  14: () => bg("#d9d7d0") + `<rect x="0" y="130" width="320" height="50" fill="#a9a398"/>` +
+       tv(170, 14, 130, 80, txt(235, 48, "WAR?", {size: 20, fill: "#ff2e2e", stroke: "#fff"}) + txt(235, 76, "PEACE?", {size: 15, fill: "#ffe600", stroke: "#141414"}), "#141414") +
+       txt(56, 66, "WAR?", {size: 26, fill: "#ff2e2e", stroke: "#ffe600", sw: 4, rot: -12}) + arrow(84, 72, 114, 94, "#ff2e2e") +
+       txt(212, 126, "PEACE?", {size: 18, fill: "#ffe600", stroke: "#141414", sw: 4, rot: 10}) + arrow(196, 116, 182, 104, "#141414") +
+       P(150, 180, 1, {hb: "suit", eyes: "wide", mouth: "o"}) + `<rect x="40" y="140" width="240" height="10" fill="#7a6a55"/>`,
+  15: () => answer(["#ffe600", "#ff2e2e"], {hb: "suit", mouth: "flat"}) + txt(282, 34, "?!", {size: 28, fill: "#fff", stroke: "#141414", sw: 4}),
+  16: () => bg("#ff7ab6") + Array.from({length: 11}, (_, i) => `<rect x="${i * 30}" y="0" width="14" height="140" fill="#ff9cc8"/>`).join("") + `<rect x="0" y="140" width="320" height="40" fill="#7ef0d0"/>` +
+       tv(70, 20, 180, 110, alienHead(160, 70, .9) + `<rect x="74" y="108" width="172" height="18" fill="#e0002a"/>` + txt(160, 121, "ALIEN FOUND · 외계인 발견", {size: 9, fill: "#fff"}), "#1b2b4a") +
+       txt(160, 16, "ARE HUMANS TASTY?", {size: 11, fill: "#fff", stroke: "#e0002a"}) +
+       `<rect x="40" y="6" width="240" height="140" fill="none" stroke="#141414" stroke-dasharray="4 3" stroke-width="1.4"/>` + arrow(44, 10, 74, 24, "#141414") + arrow(276, 142, 246, 128, "#141414") + txt(30, 172, "줌인", {size: 11, fill: "#141414", anchor: "start"}),
+  17: () => Array.from({length: 12}, (_, i) => `<rect x="${i * 28}" y="0" width="28" height="180" fill="${i % 2 ? "#7ef0d0" : "#ff9cc8"}"/>`).join("") + tv(220, 26, 80, 54, alienHead(260, 52, .4), "#1b2b4a") +
+       P(130, 186, 1.2, {hb: "maid", shake: true, mouth: "flat"}),
+  18: () => bg("#2b1d14") + [40, 130, 220].map((x, j) => `<path d="M${x} 110V40Q${x + 30} 6 ${x + 60} 40V110Z" fill="#fff"/>` +
+         ["#ff2e2e", "#ffd400", "#39ff6a", "#00d1ff", "#8f5bff"].map((c, i) => `<rect x="${x + i * 12}" y="${20 + (i + j) % 3 * 8}" width="12" height="90" fill="${c}" opacity=".85"/>`).join("") + `<path d="M${x} 110V40Q${x + 30} 6 ${x + 60} 40V110Z" fill="none" stroke="#141414" stroke-width="3"/>`).join("") +
+       `<path d="M70 110L20 180M160 110L160 180M250 110L300 180" stroke="#ffd400" stroke-width="10" opacity=".25"/><rect x="0" y="140" width="320" height="40" fill="#5a3d26"/>` +
+       sil("M40 180Q60 60 160 30Q260 60 280 180Z", .9, "#050505") + sil("M160 30m-34 0a34 30 0 1 0 68 0a34 30 0 1 0 -68 0", .9, "#050505") +
+       P(160, 182, .75, {hb: "robe", eyes: "wide", mouth: "flat"}) + txt(160, 92, "TRUTH?", {size: 20, fill: "#ffd400", stroke: "#050505", sw: 3}),
+  19: () => rays(["#ff2e2e", "#ff7a1a", "#ffd400", "#39ff6a", "#00d1ff", "#8f5bff"]) + dots("#fff", .2) + P(160, 290, 2.3, {hb: "robe", shake: true, mouth: "o"}) +
+       txt(58, 42, "몰라!", {size: 22, fill: "#fff", stroke: "#e0002a", sw: 4, rot: -10}) + txt(260, 42, "묻지 마!", {size: 20, fill: "#fff", stroke: "#e0002a", sw: 4, rot: 10}),
+  20: () => bridge(bg("#3a3a3a") + Array.from({length: 10}, (_, i) => { const a = i * .63, d = 100; return `<path d="M${160 + 50 * Math.cos(a)} ${90 + 50 * Math.sin(a)}L${160 + d * Math.cos(a + .08)} ${90 + d * Math.sin(a + .08)}L${160 + (d - 14) * Math.cos(a - .12)} ${90 + (d - 14) * Math.sin(a - .12)}Z" fill="#7b2ff7" stroke="${K}"/>`; }).join("")),
+  21: () => bridge(lab() + `<path d="M20 20L110 80M300 20L210 80M20 160L110 110M300 160L210 110" stroke="#777" stroke-width="5"/><path d="M0 60H320" stroke="#34e7ff" stroke-width="2"/>`),
+  22: () => bridge(bg("#9aa6b4") + `<rect x="10" y="30" width="40" height="150" fill="#6f7a88"/><rect x="270" y="20" width="44" height="160" fill="#6f7a88"/>` + crowd([40, 80, 240, 284], 180) + `<path d="M96 120l24 -6M226 120l-24 -6" stroke="#141414" stroke-width="5" stroke-linecap="round"/>`),
+  23: () => bridge(bg("#c9bca6") + `<rect x="0" y="130" width="320" height="50" fill="#8d7c62"/>` + tv(224, 40, 80, 56) + crowd([40, 84], 150) + crowd([250], 160)),
+  24: () => bg("#ffffff") + ["#ff3d7f", "#ffd400", "#00d1ff", "#8f5bff"].map((c, i) => `<rect x="${i % 2 ? 300 : 0}" y="${i < 2 ? 0 : 90}" width="20" height="90" fill="${c}" opacity=".8"/>`).join("") + P(160, 250, 3, {shake: true}),
+  25: () => rays(["#ff3d7f", "#ffd400", "#39ff6a", "#00d1ff", "#8f5bff", "#ff7a1a"], 160, 70, 24) + xmark("#fff", .25) + confetti() + speed("#fff", .6) +
+       `<g opacity=".55">${alienHead(46, 58, .7)}${tv(232, 30, 66, 44)}</g>` +
+       P(160, 174, 2.05, {walk: true}) + txt(160, 20, "I SAID DORI DORI PULDORI!", {size: 13, fill: "#fff", stroke: "#141414", sw: 4}),
+  26: () => bg("#2a0d4a") + xmark("#ff3d7f", .18) + [[50, 120, "#ff7a1a", "pot"], [110, 60, "#ffd400", "flower"], [160, 130, G, "leaf"], [215, 58, "#8f5bff", "halo"], [270, 120, "#ff3d7f", "ax"]].map(([x, y, c, h], i) =>
+         `<circle cx="${x}" cy="${y + 4}" r="34" fill="${c}" opacity=".35"/>` + spore(x, y + 16, 22, "#4d2a7a") + `<path d="M${x - 24} ${y + 4}l-10 -10M${x + 24} ${y + 4}l10 -10M${x} ${y - 10}v-12" stroke="${c}" stroke-width="2.5"/>` + P(x, y + 30, .65, {color: c, hat: h}) +
+         `<circle cx="${x + 26}" cy="${y - 22}" r="8" fill="#fff" stroke="#141414"/>` + txt(x + 26, y - 18.5, i + 1, {size: 10, fill: "#141414"})).join(""),
+  // 동시 폭발: 6줄 × 6~7마리 = 39마리, 뒤로 갈수록 작게
+  "26B": () => rays(["#2a0d4a", "#4d1a7a"], 160, 70, 24) + flash(160, 70, 60) + xmark("#ffd400", .15) +
+       [[38, .3, 7], [62, .36, 7], [88, .42, 6], [116, .5, 7], [146, .58, 6], [182, .7, 6]].map(([y, s, n], r) =>
+         Array.from({length: n}, (_, i) => { const x = 320 * (i + .5 + (r % 2) * .25) / n - (r % 2) * 10, k = r * 7 + i;
+           return spore(x, y - 6 * s, 12 * s, "#4d2a7a") + P(x, y, s, {color: CONF[k % 6], hat: ["pot", "flower", "leaf", "halo", "ax", ""][(k * 5) % 6], shake: r > 3}); }).join("")).join("") +
+       confetti(60) + txt(160, 22, "POP!", {size: 22, fill: "#ffd400", stroke: "#141414", sw: 4}) + txt(292, 172, "30+", {size: 16, fill: "#fff", stroke: "#e0002a", sw: 4}),
+  27: () => bg("#00b7ff") + `<circle cx="160" cy="330" r="200" fill="#2ecc71"/><path d="M40 160Q90 140 130 156" stroke="#1e5bff" stroke-width="10" fill="none" opacity=".7"/>` +
+       [[40, 40], [250, 30], [270, 110], [60, 110]].map(([x, y]) => `<ellipse cx="${x}" cy="${y}" rx="34" ry="12" fill="#fff"/>`).join("") +
+       ["#ff3d7f", "#ff7a1a", "#ffd400", "#39ff6a", "#00d1ff", "#8f5bff"].map((c, i) => `<path d="M${120 + i * 5} 0L${150 + i * 5} 60" stroke="${c}" stroke-width="5"/>`).join("") +
+       `<g transform="rotate(25 160 80)">${P(160, 104, .9, {eyes: "wide", mouth: "o"})}</g>`,
+  28: () => `<rect width="320" height="60" fill="#5b2a86"/><rect y="60" width="320" height="40" fill="#c2378a"/><rect y="100" width="320" height="40" fill="#ff7a1a"/><circle cx="250" cy="118" r="22" fill="#ffd400"/><path d="M0 140H320V180H0Z" fill="#3a2a4a"/>` +
+       [[0, 70, 40], [40, 90, 30], [70, 60, 36], [210, 80, 34], [244, 56, 40], [284, 96, 36]].map(([x, y, w]) => `<rect x="${x}" y="${y}" width="${w}" height="${140 - y}" fill="#2b1f3a"/>`).join("") +
+       `<path d="M160 140V54M152 70h16l-4 -16h-8Z" stroke="#2b1f3a" stroke-width="4" fill="#2b1f3a"/><ellipse cx="160" cy="150" rx="70" ry="12" fill="#1d1428"/>` +
+       P(160, 156, .9) + txt(160, 32, "Seoul, 2026", {size: 18, fill: "#fff", stroke: "#2b1f3a", sw: 3})
+};
+
+const esc = t => String(t).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+document.getElementById("bar").innerHTML = S.map(s =>
+  `<a class="seg" href="#${s.id}" title="${esc(s.name)} ${s.t}" style="flex:${s.b - s.a};background:${s.band}">${esc(s.name)}</a>`).join("");
+document.getElementById("sections").innerHTML = S.map(s => `
+  <section id="${s.id}">
+    <h2>${esc(s.name)} <span style="font-weight:400;color:var(--muted);font-size:15px">${s.t}</span>
+      <span class="tag ${s.kind === "live" ? "tlive" : "t3d"}">${s.kind === "live" ? "실사 합성" : "3D"}</span>
+      ${s.proposal ? '<span class="tag" style="background:var(--accent)">와이피 제안</span>' : ""}</h2>
+    <p class="lead">${esc(s.lead)}</p>
+    <div class="pal">${s.pal.map(c => `<i class="sw" style="background:${c}" title="${c}"></i>`).join("")}<span class="fx">${esc(s.fx)}</span></div>
+    <div class="grid">${s.cuts.map(([n, t, ly, what, cam, sw, col, dori]) => `
+      <div class="card">
+        <div class="frame">${D[n] ? svg(D[n]()) : ""}
+          <span class="no">#${n}</span><span class="time">${t}</span>
+        </div>
+        <div class="camrow">${esc(cam)}</div>
+        <div class="body">
+          <div class="lyric">${esc(ly)}</div>
+          <div class="what">${esc(what)}</div>
+          <div class="color"><i style="background:${sw}"></i>${esc(col)}</div>
+          ${dori ? '<div class="note">도리도리 대답 컷</div>' : ""}
+        </div>
+      </div>`).join("")}
+    </div>
+    ${s.tip ? `<div class="tip"><b>와이피 메모</b> · ${esc(s.tip)}</div>` : ""}
+  </section>`).join("");
+</script>
+
+</body>
+</html>
